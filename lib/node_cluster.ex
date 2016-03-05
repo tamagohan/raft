@@ -1,3 +1,5 @@
+use Croma
+
 defmodule Raft.NodeCluster do
   use GenServer
   import Supervisor.Spec
@@ -25,7 +27,7 @@ defmodule Raft.NodeCluster do
     {:noreply, sup}
   end
 
-  defp generate_node_names(number_of_nodes) when is_integer(number_of_nodes) do
+  defunp generate_node_names(number_of_nodes :: g[pos_integer]) :: [String.t] do
     for i <- 1..number_of_nodes do "node#{i}" |> String.to_atom end
   end
 end

@@ -1,8 +1,10 @@
+use Croma
+
 defmodule Raft do
   use GenServer
   import Supervisor.Spec
 
-  def start(number_of_nodes \\ 5) when is_integer(number_of_nodes) and number_of_nodes > 0 do
+  defun start(number_of_nodes :: g[pos_integer] \\ 5) :: {:ok, pid} do
     children = [
       supervisor(Raft.NodeCluster, [number_of_nodes], restart: :transient)
     ]

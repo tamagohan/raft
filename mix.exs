@@ -15,11 +15,16 @@ defmodule Raft.Mixfile do
 
   def application do
     [
-      applications: [:logger]
+      applications: [
+        :logger,
+        :croma,
+      ]
     ]
   end
 
   defp deps do
-    []
+    [
+      {:croma, "0.3.8"}
+    ]
   end
 end

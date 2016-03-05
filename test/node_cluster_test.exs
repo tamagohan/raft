@@ -6,4 +6,3 @@ defmodule Raft.NodeClusterTest do
     %{active: 5, specs: 1, supervisors: 0, workers: 5} = Supervisor.count_children(:sys.get_state(Raft.NodeCluster))
   end
 end
-
