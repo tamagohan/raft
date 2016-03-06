@@ -6,7 +6,7 @@ defmodule Raft do
 
   defun start(number_of_nodes :: g[pos_integer] \\ 5) :: {:ok, pid} do
     children = [
-      supervisor(Raft.NodeCluster, [number_of_nodes], restart: :transient)
+      supervisor(Raft.NodeManager, [number_of_nodes], restart: :transient)
     ]
 
     opts = [strategy: :one_for_one, name: Raft.Supervisor]

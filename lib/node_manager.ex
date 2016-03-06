@@ -1,11 +1,11 @@
 use Croma
 
-defmodule Raft.NodeCluster do
+defmodule Raft.NodeManager do
   use GenServer
   import Supervisor.Spec
 
   def start_link(number_of_nodes) do
-    IO.puts "[NodeCluster] Starting (number of nodes is #{number_of_nodes})"
+    IO.puts "[NodeManager] Starting (number of nodes is #{number_of_nodes})"
     GenServer.start_link(__MODULE__, number_of_nodes, name: __MODULE__)
   end
 
