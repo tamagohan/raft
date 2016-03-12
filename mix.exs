@@ -15,10 +15,8 @@ defmodule Raft.Mixfile do
 
   def application do
     [
-      applications: [
-        :logger,
-        :croma,
-      ]
+      mod:          {Raft, 5},
+      applications: [:logger, :croma]
     ]
   end
 

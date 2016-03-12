@@ -1,15 +1,15 @@
 use Croma
 
 defmodule Raft do
-  use GenServer
   import Supervisor.Spec
 
-  defun start(number_of_nodes :: g[pos_integer] \\ 5) :: {:ok, pid} do
-    children = [
-      supervisor(Raft.NodeManager, [number_of_nodes], restart: :transient)
-    ]
-
-    opts = [strategy: :one_for_one, name: Raft.Supervisor]
+  def start(_, _) do
+    children = [supervisor(Raft.PeerSup, [])]
+    opts = [strategy: :simple_one_for_one, name: Raft.Supervisor]
     Supervisor.start_link(children, opts)
+  end
+
+  defun start_peer(peer_name :: g[atom]) :: {:ok, pid} do
+    Supervisor.start_child(Raft.Supervisor, [peer_name])
   end
 end
