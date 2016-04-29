@@ -1,1 +1,3 @@
-%{"croma": {:hex, :croma, "0.3.8"}}
+%{"bunt": {:hex, :bunt, "0.1.5"},
+  "credo": {:hex, :credo, "0.3.13"},
+  "croma": {:hex, :croma, "0.4.3"}}

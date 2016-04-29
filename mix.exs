@@ -22,7 +22,8 @@ defmodule Raft.Mixfile do
 
   defp deps do
     [
-      {:croma, "0.3.8"}
+      {:croma, "0.4.3"},
+      {:credo, "0.3.13"},
     ]
   end
 end
