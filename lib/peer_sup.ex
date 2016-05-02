@@ -13,7 +13,7 @@ defmodule Raft.PeerSup do
     supervise(children, strategy: :one_for_one)
   end
 
-  defunp name(peer_name :: g[atom]) :: atom do
+  defunp name(peer_name :: v[Raft.State.PeerName.t]) :: atom do
     "#{peer_name}_sup" |> String.to_atom
   end
 end

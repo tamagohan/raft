@@ -2,21 +2,33 @@ use Croma
 
 defmodule Raft.State do
   import Croma.TypeGen
+
+  defmodule PeerName do
+    use Croma.SubtypeOfAtom, values: [:peer1, :peer2, :peer3]
+  end
+
+  defmodule PeerNameList do
+    use Croma.SubtypeOfList, elem_module: PeerName, min_length: 1
+  end
+
+  defmodule Config do
+    use Croma.Struct, fields: [
+      peer_names: PeerNameList
+    ]
+
+    defun default_peers :: PeerNameList.t do
+      [:peer1, :peer2, :peer3]
+    end
+  end
+
   defmodule Term do
     use Croma.SubtypeOfInt, min: 1, default: 1
-  end
-  defmodule PeerName do
-    @type t :: atom
-    def validate(t) when is_atom(t), do: {:ok, t}
-    def validate(_),                 do: {:error, {:invalid_value, [__MODULE__]}}
-  end
-  defmodule PeerNameList do
-    use Croma.SubtypeOfList, elem_module: PeerName
   end
 
   use Croma.Struct, fields: [
     term:       Term,
     voted_for:  nilable(PeerName),
-    peer_names: PeerNameList,
+    peer_name:  PeerName,
+    config:     Config,
   ]
 end
