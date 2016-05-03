@@ -31,4 +31,8 @@ defmodule Raft.State do
     peer_name:  PeerName,
     config:     Config,
   ]
+
+  defun voted?(%Raft.State{voted_for: voted_for}) :: boolean do
+    !is_nil(voted_for)
+  end
 end
