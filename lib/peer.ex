@@ -29,12 +29,35 @@ defmodule Raft.Peer do
     end
   end
 
+  def handle_event(%Raft.VoteRequest{}, :candidate, state) do
+    IO.inspect "receive vote request event"
+    # TODO handle vote request event
+    {:next_state, :candidate, state}
+  end
+
   defunp election_timeout :: pos_integer do
     Enum.random(@min_election_timeout..@max_election_timeout)
   end
 
   defunp become_candidate(%State{term: term, peer_name: peer_name} = state) :: State.t do
     IO.puts "[Peer] #{peer_name} became candidate"
-    %State{state | term: term + 1}
+    new_state = %State{state | term: term + 1}
+    request_voting(new_state)
+    new_state
+  end
+
+  defunp request_voting(%State{term: term, peer_name: peer_name} = state) :: State.t do
+    request = %Raft.VoteRequest{term: term, from: peer_name}
+    send_to_all_peers(state, request)
+  end
+
+  defp send_to_all_peers(%State{config: %State.Config{peer_names: peer_names}}, event) do
+    Enum.each(peer_names, fn peer_name ->
+      try do
+        :gen_fsm.send_all_state_event(peer_name, event)
+      rescue
+        ArgumentError -> IO.inspect "could not send #{inspect(event)} to #{peer_name}"
+      end
+    end)
   end
 end
