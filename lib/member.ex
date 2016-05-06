@@ -19,6 +19,10 @@ defmodule Raft.Member do
     Raft.Follower.handle_timeout(state)
   end
 
+  def candidate(:timeout, state) do
+    Raft.Candidate.handle_timeout(state)
+  end
+
   def handle_event(%Raft.VoteRequest{} = request, :candidate, state) do
     Raft.Candidate.handle_vote_request(state, request)
   end

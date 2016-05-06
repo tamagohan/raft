@@ -8,6 +8,7 @@ defmodule Raft.Follower do
       :gen_fsm.send_event_after(Raft.Election.timeout, :timeout)
       {:next_state, :follower, state}
     else
+      :gen_fsm.send_event_after(0, :timeout)
       new_state = become_candidate(state)
       {:next_state, :candidate, new_state}
     end
@@ -16,12 +17,6 @@ defmodule Raft.Follower do
   defunp become_candidate(%State{term: term, peer: peer} = state) :: State.t do
     IO.puts "[Follower] #{inspect peer} became candidate"
     new_state = %State{state | term: term + 1}
-    request_voting(new_state)
     new_state
-  end
-
-  defunp request_voting(%State{term: term, peer: peer, config: %Raft.Config{peers: peers}}) :: State.t do
-    request = %Raft.VoteRequest{term: term, from: peer}
-    Raft.Peer.send_all_state_event_to_all_peers(peers, request)
   end
 end
