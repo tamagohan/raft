@@ -17,7 +17,7 @@ defmodule Raft.StateTest do
 
   test "Raft.State: new/1" do
     peer   = Peer.new!(name: :peer1, node_name: :"peer1@127.0.0.1")
-    config = Config.new!(peers: Config.load_peers_from_config_file)
+    config = Config.new!(peers: [peer])
     assert State.new(term: 1, voted_for: nil, peer: peer, config: config) == {:ok, %State{term: 1, voted_for: nil, peer: peer, config: config}}
     assert State.new(         voted_for: nil, peer: peer, config: config) == {:ok, %State{term: 1, voted_for: nil, peer: peer, config: config}}
 

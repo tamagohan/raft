@@ -3,13 +3,13 @@ use Croma
 defmodule Raft.MemberSup do
   use Supervisor
 
-  def start_link(peer_name) do
-    IO.puts "[MemberSup] #{peer_name} Starting"
-    Supervisor.start_link(__MODULE__, peer_name, name: name(peer_name))
+  def start_link(%Raft.Peer{name: peer_name} = peer) do
+    IO.puts "[MemberSup] #{inspect peer} Starting"
+    Supervisor.start_link(__MODULE__, peer, name: name(peer_name))
   end
 
-  def init(peer_name) do
-    children = [worker(Raft.Member, [peer_name], restart: :transient)]
+  def init(peer) do
+    children = [worker(Raft.Member, [peer], restart: :transient)]
     supervise(children, strategy: :one_for_one)
   end
 
