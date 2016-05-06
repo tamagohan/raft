@@ -3,9 +3,10 @@ use Croma
 defmodule Raft.StateTest do
   use ExUnit.Case
 
-  alias Raft.{Config, Peer, State}
+  alias Raft.{Config, Peer}
+  alias Raft.Member.State
 
-  test "RaftState.Config: new/1" do
+  test "Raft.Config: new/1" do
     peer = Peer.new!(name: :peer1, node_name: :"peer1@127.0.0.1")
     assert Config.new(peers: [peer]) == {:ok, %Config{peers: [peer]}}
 
@@ -14,7 +15,7 @@ defmodule Raft.StateTest do
     assert Config.new(peers: "not list")      == {:error, {:invalid_value, [Config, Config.PeerList]}}
   end
 
-  test "RaftState: new/1" do
+  test "Raft.State: new/1" do
     peer   = Peer.new!(name: :peer1, node_name: :"peer1@127.0.0.1")
     config = Config.new!(peers: Config.load_peers_from_config_file)
     assert State.new(term: 1, voted_for: nil, peer: peer, config: config) == {:ok, %State{term: 1, voted_for: nil, peer: peer, config: config}}

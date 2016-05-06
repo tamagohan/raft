@@ -4,7 +4,7 @@ defmodule Raft do
   import Supervisor.Spec
 
   def start(_, _) do
-    children = [supervisor(Raft.PeerSup, [])]
+    children = [supervisor(Raft.MemberSup, [])]
     opts = [strategy: :simple_one_for_one, name: Raft.Supervisor]
     Supervisor.start_link(children, opts)
   end

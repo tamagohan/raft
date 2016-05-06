@@ -1,6 +1,6 @@
 use Croma
 
-defmodule Raft.State do
+defmodule Raft.Member.State do
   import Croma.TypeGen
 
   defmodule Term do
@@ -14,7 +14,7 @@ defmodule Raft.State do
     config:     Raft.Config,
   ]
 
-  defun voted?(%Raft.State{voted_for: voted_for}) :: boolean do
+  defun voted?(%Raft.Member.State{voted_for: voted_for}) :: boolean do
     !is_nil(voted_for)
   end
 end

@@ -1,27 +1,10 @@
 use Croma
 
-defmodule Raft.Peer do
-  alias Raft.State
+defmodule Raft.Member do
+  alias Raft.Member.State
 
   @min_election_timeout   500
   @max_election_timeout 1_000
-
-  defmodule NodeName do
-    @type t :: atom
-    def validate(t) when is_atom(t), do: {:ok, t}
-    def validate(_),                 do: {:error, {:invalid_value, [__MODULE__]}}
-  end
-
-  defmodule Name do
-    @type t :: atom
-    def validate(t) when is_atom(t), do: {:ok, t}
-    def validate(_),                 do: {:error, {:invalid_value, [__MODULE__]}}
-  end
-
-  use Croma.Struct, fields: [
-    node_name: NodeName,
-    name:      Name,
-  ]
 
   def start_link(peer_name) do
     IO.puts "[Peer] #{peer_name} starting"
@@ -63,18 +46,8 @@ defmodule Raft.Peer do
     new_state
   end
 
-  defunp request_voting(%State{term: term, peer: peer} = state) :: State.t do
+  defunp request_voting(%State{term: term, peer: peer, config: %Raft.Config{peers: peers}}) :: State.t do
     request = %Raft.VoteRequest{term: term, from: peer}
-    send_to_all_peers(state, request)
-  end
-
-  defp send_to_all_peers(%State{config: %Raft.Config{peers: peers}}, event) do
-    Enum.each(peers, fn %Raft.Peer{node_name: node_name, name: peer_name} = peer ->
-      try do
-        Node.spawn(node_name, fn -> :gen_fsm.send_all_state_event(peer_name, event) end)
-      rescue
-        ArgumentError -> IO.inspect "could not send #{inspect(event)} to #{inspect peer}"
-      end
-    end)
+    Raft.Peer.send_all_state_event_to_all_peers(peers, request)
   end
 end
