@@ -9,7 +9,7 @@ defmodule Raft do
     Supervisor.start_link(children, opts)
   end
 
-  defun start_peer(peer_name :: v[Raft.State.PeerName.t]) :: {:ok, pid} do
+  defun start_peer(peer_name :: v[Raft.Peer.Name.t]) :: {:ok, pid} do
     Supervisor.start_child(Raft.Supervisor, [peer_name])
   end
 end
