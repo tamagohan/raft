@@ -15,7 +15,7 @@ defmodule RaftTest do
       assert :sys.get_state(:peer1) == {:follower,  %Raft.Member.State{peer: peer, term: 1, voted_for: nil, config: config}}
 
       :timer.sleep(1_000)
-      assert :sys.get_state(:peer1) == {:candidate, %Raft.Member.State{peer: peer, term: 2, voted_for: nil, config: config}}
+      assert :sys.get_state(:peer1) == {:leader, %Raft.Member.State{peer: peer, term: 2, voted_for: nil, config: config}}
 
       Supervisor.terminate_child(Raft.Supervisor, sup)
     end)

@@ -22,7 +22,7 @@ defmodule Raft.Peer do
     Enum.each(peers, fn peer -> send_all_state_event(peer, event) end)
   end
 
-  defunp send_all_state_event(%Raft.Peer{node_name: node_name, name: peer_name}, event :: any) :: pid do
+  defun send_all_state_event(%Raft.Peer{node_name: node_name, name: peer_name}, event :: any) :: pid do
     Node.spawn(node_name, fn -> :gen_fsm.send_all_state_event(peer_name, event) end)
   end
 end
