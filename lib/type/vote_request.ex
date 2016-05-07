@@ -15,11 +15,11 @@ defmodule Raft.VoteRequest do
     from: Raft.Peer,
   ]
 
-  defun accept(request :: v[Raft.VoteRequest.t]) :: Raft.VoteResponse.t do
+  defun accept(request :: v[Raft.VoteRequest.t]) :: pid do
     reply(Raft.VoteResponse.new!(request: request, accepted: true))
   end
 
-  defun refuse(request :: v[Raft.VoteRequest.t]) :: Raft.VoteResponse.t do
+  defun refuse(request :: v[Raft.VoteRequest.t]) :: pid do
     reply(Raft.VoteResponse.new!(request: request, accepted: false))
   end
 

@@ -22,7 +22,7 @@ defmodule Raft.Candidate do
     {:next_state, :leader, state}
   end
 
-  defunp request_voting(%State{term: term, peer: peer, config: %Raft.Config{peers: peers}}) :: State.t do
+  defunp request_voting(%State{term: term, peer: peer, config: %Raft.Config{peers: peers}}) :: :ok do
     request = Raft.VoteRequest.new!(term: term, from: peer)
     Raft.Peer.send_all_state_event_to_all_peers(peers, request)
   end

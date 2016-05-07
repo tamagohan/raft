@@ -26,19 +26,19 @@ defmodule Raft.Member do
     Raft.Candidate.handle_timeout(state)
   end
 
-  defun handle_event(%Raft.VoteRequest{} = request, :candidate, state :: v[State.t]) :: result do
-    Raft.Candidate.handle_vote_request(state, request)
+  defun handle_event(%Raft.VoteRequest{} = request, label :: label_t, state :: v[State.t]) :: result do
+    apply(label_module(label), :handle_vote_request, [state, request])
   end
 
-  defun handle_event(%Raft.VoteRequest{} = request, :leader, state :: v[State.t]) :: result do
-    Raft.Candidate.handle_vote_request(state, request)
+  defun handle_event(%Raft.VoteResponse{} = response, label :: label_t, state :: v[State.t]) :: result do
+    apply(label_module(label), :handle_vote_response, [state, response])
   end
 
-  defun handle_event(%Raft.VoteResponse{} = response, :candidate, state :: v[State.t]) :: result do
-    Raft.Candidate.handle_vote_response(state, response)
-  end
-
-  defun handle_event(%Raft.VoteResponse{} = response, :leader, state :: v[State.t]) :: result do
-    Raft.Candidate.handle_vote_response(state, response)
+  defunp label_module(label :: label_t) :: module do
+    case label do
+      :follower  -> Raft.Follower
+      :candidate -> Raft.Candidate
+      :leader    -> Raft.Leader
+    end
   end
 end

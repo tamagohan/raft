@@ -5,7 +5,7 @@ defmodule Raft.Mixfile do
     [
       app:             :raft,
       version:         "0.0.1",
-      elixir:          "1.2.2",
+      elixir:          "1.2.4",
       elixirc_options: [warnings_as_errors: true],
       build_embedded:  Mix.env == :prod,
       start_permanent: Mix.env == :prod,
@@ -22,8 +22,9 @@ defmodule Raft.Mixfile do
 
   defp deps do
     [
-      {:croma, "0.4.3"},
-      {:credo, "0.3.13"},
+      {:croma,   "0.4.3"},
+      {:credo,   "0.3.13"},
+      {:dialyze, "0.2.1", [only: :dev ]},
     ]
   end
 end
